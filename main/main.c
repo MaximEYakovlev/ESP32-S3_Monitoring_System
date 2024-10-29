@@ -1,7 +1,10 @@
-// https://docs.espressif.com/projects/esp-idf/en/stable/esp32/get-started/linux-macos-setup.html 
-// Step 4. Set up the Environment Variables
+// https://docs.espressif.com/projects/esp-idf/en/stable/esp32/get-started/linux-macos-setup.html
+// Set up the Environment Variables
 // . $HOME/esp/esp-idf/export.sh
 // idf.py set-target esp32-S3
+// idf.py menuconfig
+// idf.py -p /dev/ttyUSB0 flash
+// sudo chmod a+rw /dev/ttyUSB0
 // idf.py build
 // idf.py flash
 // idf.py monitor
@@ -10,20 +13,17 @@
 #include "driver/i2c.h"
 #include "driver/adc.h"
 #include "freertos/FreeRTOS.h"
-#include "freertos/task.h" 
+#include "freertos/task.h"
 #include "freertos/queue.h"
 #include "esp_http_server.h"
 #include "esp_log.h"
 #include "esp_wifi.h"
 #include "esp_event.h"
 #include "nvs_flash.h"
-#include "esp_system.h"
-#include "freertos/event_groups.h"
-
-#define I2C_MASTER_NUM 0
 #define I2C_MASTER_SCL_IO 2
 #define I2C_MASTER_SDA_IO 3
 #define I2C_MASTER_FREQ_HZ 100000
+#define I2C_MASTER_NUM I2C_NUM_0
 #define SHT40_SENSOR_ADDR 0x44
 #define SHT40_MEASURE_CMD 0xFD
 
@@ -279,7 +279,7 @@ void read_adc_task(void *arg)
 
         vTaskDelay(pdMS_TO_TICKS(1000));
     }
-}ESP32-S3_Monitoring_System
+} // ESP32-S3_Monitoring_System
 
 void record_data_task(void *arg)
 {
@@ -292,7 +292,7 @@ void record_data_task(void *arg)
             xQueueReceive(temp_queue_adc, &adc_data_r, portMAX_DELAY) == pdPASS)
         {
             add_record(temp_data.temperature, temp_data.humidity, adc_data_r.voltage_0, adc_data_r.voltage_1);
-        }ESP32-S3_Monitoring_System
+        } // ESP32-S3_Monitoring_System
 
         vTaskDelay(pdMS_TO_TICKS(10));
     }
